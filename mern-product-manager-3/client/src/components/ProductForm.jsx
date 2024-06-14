@@ -6,17 +6,15 @@ const ProductForm = () => {
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        try {
-            const newProduct = { title, price, description };
-            await axios.post('http://localhost:5000/api/products', newProduct);
-            setTitle('');
-            setPrice('');
-            setDescription('');
-        } catch (err) {
-            console.error(err);
-        }
+        axios.post('http://localhost:5000/api/products', { title, price, description })
+            .then(() => {
+                setTitle('');
+                setPrice('');
+                setDescription('');
+            })
+            .catch(err => console.error(err));
     };
 
     return (
@@ -69,4 +67,3 @@ const ProductForm = () => {
 };
 
 export default ProductForm;
-

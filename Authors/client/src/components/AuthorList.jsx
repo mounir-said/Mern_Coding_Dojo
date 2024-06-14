@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const AuthorList = () => {
     const [authors, setAuthors] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get('http://localhost:5000/api/authors')
             .then(res => setAuthors(res.data))
-            .catch(err => console.log(err));
+            .catch(err => console.error(err));
     }, []);
 
     const deleteAuthor = (id) => {
-        axios.delete(`http://localhost:5000/api/authors/${id}`)
+        axios.delete('http://localhost:5000/api/authors/' + id)
             .then(() => setAuthors(authors.filter(author => author._id !== id)))
-            .catch(err => console.log(err));
+            .catch(err => console.error(err));
     };
 
     return (
@@ -26,8 +27,9 @@ const AuthorList = () => {
                 {authors.map(author => (
                     <li key={author._id} className="list-group-item">
                         {author.name}
-                        <Link to={`/authors/edit/${author._id}`} className="btn btn-sm btn-outline-primary ml-2">Edit</Link>
+                        <button onClick={() => navigate('/authors/edit/' + id)} className="btn btn-sm btn-outline-primary ml-2">Edit</button>
                         <button onClick={() => deleteAuthor(author._id)} className="btn btn-sm btn-outline-danger ml-2">Delete</button>
+                        
                     </li>
                 ))}
             </ul>

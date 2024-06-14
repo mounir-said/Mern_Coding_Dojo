@@ -1,45 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const ProductEdit = () => {
     const { id } = useParams();
-    const [product, setProduct] = useState({
-        title: '',
-        price: '',
-        description: ''
-    });
+    const [title, setTitle] = useState('');
+    const [price, setPrice] = useState('');
+    const [description, setDescription] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/products/${id}`)
-            .then(res => setProduct(res.data))
+        axios.get('http://localhost:5000/api/products/' + id)
+            .then(res => {
+                setTitle(res.data.title);
+                setPrice(res.data.price);
+                setDescription(res.data.description);
+            })
             .catch(err => console.error(err));
     }, [id]);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setProduct({ ...product, [name]: value });
-    };
-
-    const handleSubmit = (e) => {
+    const updateProduct = e => {
         e.preventDefault();
-        axios.put(`http://localhost:5000/products/${id}`, product)
-            .then(() => navigate(`/products/${id}`))
+        axios.put('http://localhost:5000/api/products/' + id, {
+            title,
+            price,
+            description
+        })
+            .then(() => navigate('/products/' + id))
             .catch(err => console.error(err));
-    };
+    }
 
     return (
         <div className="container mt-5">
             <h2>Edit Product</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={updateProduct}>
                 <div className="form-group">
                     <label>Title:</label>
                     <input 
                         type="text" 
                         name="title" 
-                        value={product.title} 
-                        onChange={handleChange} 
+                        value={title} 
+                        onChange={(e) => setTitle(e.target.value)} 
                         className="form-control" 
                     />
                 </div>
@@ -48,8 +49,8 @@ const ProductEdit = () => {
                     <input 
                         type="number" 
                         name="price" 
-                        value={product.price} 
-                        onChange={handleChange} 
+                        value={price} 
+                        onChange={(e) => setPrice(e.target.value)} 
                         className="form-control" 
                     />
                 </div>
@@ -57,8 +58,8 @@ const ProductEdit = () => {
                     <label>Description:</label>
                     <textarea 
                         name="description" 
-                        value={product.description} 
-                        onChange={handleChange} 
+                        value={description} 
+                        onChange={(e) => setDescription(e.target.value)} 
                         className="form-control" 
                     />
                 </div>
@@ -66,6 +67,6 @@ const ProductEdit = () => {
             </form>
         </div>
     );
-};
+}
 
 export default ProductEdit;

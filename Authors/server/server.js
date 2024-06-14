@@ -1,20 +1,17 @@
 const express = require('express');
 const cors = require('cors');
-const connectDB = require('./config/db.config');
-const AuthorRoutes = require('./routes/author.routes');
-require('dotenv').config();
-
 const app = express();
-
-// Connect Database
-connectDB();
+require('dotenv').config();
+const port = process.env.PORT;
+require('./config/mongoose.config'); 
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.use(cors()); 
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: true })); 
 
 // Routes
-app.use('/api', AuthorRoutes);
+require('./routes/author.routes')(app);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+// Start the server
+app.listen(port, () => console.log(`Listening on port: ${port}`));

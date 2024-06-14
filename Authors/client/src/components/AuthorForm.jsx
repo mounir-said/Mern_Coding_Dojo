@@ -10,19 +10,13 @@ const AuthorForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         axios.post('http://localhost:5000/api/Authors', { name })
-            .then(() => navigate('/authors')) // Navigate back to the author list after adding a new author
-            .catch(err => setError(err.response.data.error));
-    };
-
-    const handleAddAuthor = () => {
-        axios.post('http://localhost:5000/api/Authors', { name })
-            .then(() => navigate('/authors')) // Navigate back to the author list after adding a new author
+            .then(() => navigate('/authors')) 
             .catch(err => setError(err.response.data.error));
     };
 
     const handleReset = () => {
-      setName('');
-      setError('');
+        setName('');
+        setError('');
     };
 
     return (
@@ -32,7 +26,7 @@ const AuthorForm = () => {
             {error && <p className="text-danger">{error}</p>}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <input 
+                    <input
                         type="text"
                         className="form-control"
                         placeholder="Author Name"
@@ -40,8 +34,8 @@ const AuthorForm = () => {
                         onChange={(e) => setName(e.target.value)}
                     />
                 </div>
-                <button type="submit" className="btn btn-primary" onClick={handleAddAuthor}>Submit</button>
-                <button type="button" className="btn btn-secondary ml-2" onClick={handleReset}>Cansel</button>
+                <button type="submit" className="btn btn-primary mr-2">Submit</button>
+                <button type="button" className="btn btn-secondary" onClick={handleReset}>Cancel</button>
             </form>
         </div>
     );
