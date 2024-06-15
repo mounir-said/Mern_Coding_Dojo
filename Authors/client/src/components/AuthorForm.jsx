@@ -4,26 +4,34 @@ import { useNavigate, Link } from 'react-router-dom';
 
 const AuthorForm = () => {
     const [name, setName] = useState('');
-    const [error, setError] = useState('');
+    const [errors, setErrors] = useState([]); 
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         axios.post('http://localhost:5000/api/Authors', { name })
             .then(() => navigate('/authors')) 
-            .catch(err => setError(err.response.data.error));
+            .catch(err=>{
+                const errorResponse = err.response.data.errors; // Get the errors from err.response.data
+                const errorArr = []; // Define a temp error array to push the messages in
+                for (const key of Object.keys(errorResponse)) { // Loop through all errors and get the messages
+                    errorArr.push(errorResponse[key].message)
+                }
+                // Set Errors
+                setErrors(errorArr);
+            }) 
     };
 
     const handleReset = () => {
         setName('');
-        setError('');
+        setErrors([]);
     };
 
     return (
         <div className="container">
             <Link to="/authors" className="btn btn-secondary mb-3">Home</Link>
             <h1 className="my-4">Add New Author</h1>
-            {error && <p className="text-danger">{error}</p>}
+            {errors.map((err, index) => <p key={index} className="text-danger">{err}</p>)}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <input

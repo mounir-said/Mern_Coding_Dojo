@@ -1,10 +1,12 @@
 const { Author } = require('../models/author.model');
 
-module.exports.createAuthor = (req, res) => {
-    const { name } = req.body;
-    Author.create({ name })
-        .then(newAuthor => res.status(201).json(newAuthor))
-        .catch(err => res.status(500).json({ error: err.message }));
+module.exports = {
+    createAuthor: (req, res) => {
+        const { name } = req.body;
+        Author.create({ name })
+            .then(author => res.json(author))
+            .catch(err => res.status(400).json(err));
+    }
 };
 
 module.exports.getAuthor = (req, res) => {
