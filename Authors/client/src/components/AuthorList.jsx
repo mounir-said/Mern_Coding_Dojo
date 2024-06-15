@@ -27,9 +27,8 @@ const AuthorList = () => {
                 {authors.map(author => (
                     <li key={author._id} className="list-group-item">
                         {author.name}
-                        <button onClick={() => navigate('/authors/edit/' + id)} className="btn btn-sm btn-outline-primary ml-2">Edit</button>
+                        <button onClick={() => navigate('/authors/edit/' + author._id)} className="btn btn-sm btn-outline-primary ml-2">Edit</button>
                         <button onClick={() => deleteAuthor(author._id)} className="btn btn-sm btn-outline-danger ml-2">Delete</button>
-                        
                     </li>
                 ))}
             </ul>
